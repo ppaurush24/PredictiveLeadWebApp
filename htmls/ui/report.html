@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang=''>
+<head>
+   <title>Company Site</title>
+   <style>
+	.background-image {
+		 position: absolute;
+			top: -20px;
+			left: -20px;
+			right: -40px;
+			bottom: -40px;
+			width: auto;
+			height: auto;
+		  background-image: url(http://ginva.com/wp-content/uploads/2012/07/city-skyline-wallpapers-008.jpg);
+
+		  -webkit-filter: blur(5px);
+		  -moz-filter: blur(5px);
+		  -o-filter: blur(5px);
+		  -ms-filter: blur(5px);
+		  filter: blur(5px);
+		}
+	 
+	.content {
+		  position: fixed;
+		  left: 0;
+		  right: 0;
+		  z-index: 9999;
+		  margin-left: 20px;
+		  margin-right: 20px;
+}
+   </style>
+</head>
+<body>
+<div class='background-image'></div>
+<div class='content'>
+
+<ul style="list-style-type:circle">
+  <li><a href='/DPWebApp/report?score=5&action=products'>Products</a></li>
+	<ul style="list-style-type:disc">
+		<li><a href='/DPWebApp/report?score=7&action=producta'>Product A</a></li>
+		<li><a href='/DPWebApp/report?score=7&action=productb'>Product B</a></li>
+	</ul>
+  <li><a href='/DPWebApp/report?score=3&action=company'>Company</a>
+	<ul style="list-style-type:disc">
+		<li><a href='/DPWebApp/report?score=5&action=video'>Video</a></li>
+		<li><a href='/DPWebApp/report?score=5&action=description'>Description PDF</a></li>
+	</ul>
+  </li>
+  <li><a href='/DPWebApp/report?score=-3&action=careers'>Careers</a>
+	<ul style="list-style-type:disc">
+		<li><a href='/DPWebApp/report?score=-5&action=joba'>Job A</a></li>
+		<li><a href='/DPWebApp/report?score=-5&action=jobb'>Job B</a></li>
+	</ul>
+  </li>
+</ul> 
+</div>
+
+</body>
+<html>

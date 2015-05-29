@@ -26,8 +26,10 @@ public class RecordController {
 				response.sendRedirect("/ui");
 			} else {
 				response.sendRedirect("/ui/report.html");
-
 				Integer score = Integer.valueOf(request.getParameter("score"));
+				String action = request.getParameter("action");
+				String email = session.getAttribute("email").toString();
+				LOG.info("Email:" + email + " Action:" + action + " score:" + score);
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

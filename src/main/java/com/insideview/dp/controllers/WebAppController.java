@@ -6,10 +6,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -35,9 +39,8 @@ public class WebAppController {
 	    .getLogger(WebAppController.class);
 
 	@RequestMapping(value = "/uploadLead")
-	@ResponseBody
-	public List<DataRecord> testMethod(HttpServletRequest request,
-	    @RequestParam MultipartFile file) {
+	public void testMethod(HttpServletRequest request,
+	    @RequestParam MultipartFile file, HttpServletResponse response) {
 		Gson gson = new GsonBuilder().create();
 		List<DataRecord> list = new ArrayList<DataRecord>();
 		LOG.info("inside controller method ");
@@ -57,22 +60,80 @@ public class WebAppController {
 						    .getDataRecordForEmail(email);
 						if (LogisticRegression.predict(result) == 1) {
 							result.setLabel(true);
+							result.setProbability(1.0);
 						} else
 							result.setLabel(false);
+						result.setProbability(0.0);
 						list.add(result);
 					} catch (Exception e) {
 						LOG.error("Exception in record with email" + email, e);
 					}
 
 				}
-				return list;
+				Collections.sort(list, new Comparator<DataRecord>() {
+					@Override
+					public int compare(DataRecord o1, DataRecord o2) {
+						if (o1.isLabel() && o2.isLabel()) {
+							return 0;
+						} else if (o1.isLabel()) {
+							return -1;
+						} else {
+							return 1;
+						}
+					}
+				});
+				// START
+
+				response.setContentType("text/html");
+				PrintWriter out = response.getWriter();
+				out.println("<html>");
+				out.println("<head>");
+				out.println("<font color=\"red\"><h1 align=\"center\">The Scored Leads are :</h1></font>");
+				out.println("</head>");
+				out.println("<body bgcolor=#CC9966>");
+				out.println("<form action=\"http://localhost:8080/public/feedback.html\" enctype=\"multipart/form-data\" method=\"post\">");
+				out.println("<table align=\"center\" border=\"1\" cellspacing=\"0\" cellpadding=\"5\">");
+
+				out.println("<tr>");
+				out.println("<th align=\"left\">S.No</th>");
+				out.println("<th align=\"left\">Lead Id</th>");
+				out.println("<th align=\"left\">Email</th>");
+				out.println("<th align=\"left\">Job Level</th>");
+				out.println("<th align=\"left\">Job Function</th>");
+				out.println("<th align=\"left\">Revenue</th>");
+				out.println("<th align=\"left\">Employee Count</th>");
+				out.println("<th align=\"left\">Will Convert?</th>");
+				out.println("<th align=\"left\">Bad Lead(Yes/No)</th>");
+				out.println("</tr>");
+
+				for (int i = 0; i < list.size(); i++) {
+					out.println("<tr>");
+					out.println("<td align=\"left\">" + (i + 1) + "</td>");
+					out.println("<td align=\"left\">" + list.get(i).getExecId() + "</td>");
+					out.println("<td align=\"left\">" + list.get(i).getEmail() + "</td>");
+					out.println("<td align=\"left\">" + list.get(i).getJobLevel() + "</td>");
+					out.println("<td align=\"left\">" + list.get(i).getJobFunction() + "</td>");
+					out.println("<td align=\"left\">" + list.get(i).getRevenue() + "</td>");
+					out.println("<td align=\"left\">" + list.get(i).getEmpCount() + "</td>");
+					out.println("<td align=\"left\">" + (list.get(i).isLabel() ? "Yes" : "No") + "</td>");
+					out.println("<td align=\"left\"><input type=\"checkbox\" name=\"radio" + i + "\" value=\"radio_" + i + "\"></td>");
+					out.println("</tr>");
+				}
+				out.println("<tr>");
+				out.println("<td align=\"center\" colspan=\"7\"><input type=\"submit\" value=\"Send Feed back to the System\" size=\"100\"></td>");
+				out.println("</tr>");
+				out.println("</table>");
+				out.println("</form>");
+				out.println("</body>");
+				out.println("</html>");
+				// END
+
 			} catch (IOException e) {
 				LOG.error("Exception in reading file", e);
 			} catch (Exception e) {
 				LOG.error("Exception: ", e);
 			}
 		}
-		return null;
 	}
 
 	@RequestMapping(value = "/uploadTraining", method = RequestMethod.POST)
