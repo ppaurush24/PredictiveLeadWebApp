@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -30,39 +32,40 @@ import com.insideview.LogisticRegression;
 @Controller
 public class WebAppController {
 	private static final Logger LOG = LoggerFactory
-			.getLogger(WebAppController.class);
+	    .getLogger(WebAppController.class);
 
 	@RequestMapping(value = "/uploadLead")
 	@ResponseBody
-	public String testMethod(HttpServletRequest request,
-			@RequestParam MultipartFile file) {
+	public List<DataRecord> testMethod(HttpServletRequest request,
+	    @RequestParam MultipartFile file) {
 		Gson gson = new GsonBuilder().create();
+		List<DataRecord> list = new ArrayList<DataRecord>();
 		LOG.info("inside controller method ");
 		if (file != null) {
 			try {
 				InputStream is = file.getInputStream();
 				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(is));
+				    new InputStreamReader(is));
 				String line = null;
 				while ((line = reader.readLine()) != null) {
 					String email = null;
 					try {
 						DataRecord dto = gson.fromJson(line, DataRecord.class);
 						email = dto.getEmail();
-						System.out.println("Processed email: " +email);
+						System.out.println("Processed email: " + email);
 						DataRecord result = DataRecordService
-								.getDataRecordForEmail(email);
+						    .getDataRecordForEmail(email);
 						if (LogisticRegression.predict(result) == 1) {
 							result.setLabel(true);
 						} else
 							result.setLabel(false);
-
-						return gson.toJson(result);
+						list.add(result);
 					} catch (Exception e) {
 						LOG.error("Exception in record with email" + email, e);
 					}
 
 				}
+				return list;
 			} catch (IOException e) {
 				LOG.error("Exception in reading file", e);
 			} catch (Exception e) {
@@ -75,24 +78,24 @@ public class WebAppController {
 	@RequestMapping(value = "/uploadTraining", method = RequestMethod.POST)
 	@ResponseBody
 	public String trainEngine(HttpServletRequest request,
-			@RequestParam("file") MultipartFile file) {
+	    @RequestParam("file") MultipartFile file) {
 		Gson gson = new GsonBuilder().create();
 		LOG.info("inside controller method for feedback ");
 		if (file != null) {
 			try {
 				InputStream is = file.getInputStream();
 				BufferedReader reader = new BufferedReader(
-						new InputStreamReader(is));
+				    new InputStreamReader(is));
 				String line = null;
 				Configuration conf = new Configuration();
 				conf.set("fs.default.name", "hdfs://172.24.2.77:9000");
 				Path path = new Path("/var/tmp/predictiveFeedback/record.txt");
 				FileSystem fs = FileSystem.get(conf);
-				
+
 				if (!fs.exists(path))
 				{
 					BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
-							fs.create(path, true)));
+					    fs.create(path, true)));
 					while ((line = reader.readLine()) != null)
 					{
 						bw.write(line);
@@ -103,7 +106,7 @@ public class WebAppController {
 				else
 				{
 					BufferedWriter bwa = new BufferedWriter(new OutputStreamWriter(
-							fs.append(path)));
+					    fs.append(path)));
 					while ((line = reader.readLine()) != null)
 					{
 						bwa.append(line);
