@@ -91,7 +91,7 @@ public class WebAppController {
 				out.println("<font color=\"red\"><h1 align=\"center\">The Scored Leads are :</h1></font>");
 				out.println("</head>");
 				out.println("<body bgcolor=#CC9966>");
-				out.println("<form action=\"http://localhost:8080/public/feedback.html\" enctype=\"multipart/form-data\" method=\"post\">");
+				out.println("<form action=\"/public/feedback.html\" enctype=\"multipart/form-data\" method=\"post\">");
 				out.println("<table align=\"center\" border=\"1\" cellspacing=\"0\" cellpadding=\"5\">");
 
 				out.println("<tr>");
