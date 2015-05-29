@@ -1,0 +1,10 @@
+{"jobLevel":3,"jobFunction":3,"empCount":50,"popularity":135,"revenue":15.3,"fortuneListed":false,"email":"sweiss@pegasusaviation.com","label":false,"compId":1044992,"execId":2306743,"empId":2380799,"probability":0.0}
+{"jobLevel":1,"jobFunction":13,"empCount":3,"popularity":197,"revenue":0.378,"fortuneListed":false,"email":"marilyn@donordigital.com","label":false,"compId":654683,"execId":2306775,"empId":2380830,"probability":0.0}
+{"jobLevel":5,"jobFunction":2,"empCount":3,"popularity":197,"revenue":0.378,"fortuneListed":false,"email":"david@malwarwick.com","label":false,"compId":654683,"execId":2306787,"empId":2380842,"probability":0.0}
+{"jobLevel":5,"jobFunction":2,"empCount":3,"popularity":197,"revenue":0.378,"fortuneListed":false,"email":"valadora@malwarwick.com","label":false,"compId":654683,"execId":2306790,"empId":2380845,"probability":0.0}
+{"jobLevel":3,"jobFunction":6,"empCount":100,"popularity":213,"revenue":5.0,"fortuneListed":false,"email":"gwa1969@gmail.com","label":false,"compId":642466,"execId":2307031,"empId":2381081,"probability":0.0}
+{"jobLevel":6,"jobFunction":1,"empCount":6,"popularity":181,"revenue":0.112,"fortuneListed":false,"email":"kvogel@convenos.com","label":false,"compId":642186,"execId":2307184,"empId":2381221,"probability":0.0}
+{"jobLevel":1,"jobFunction":17,"empCount":28,"popularity":1798,"revenue":14.03,"fortuneListed":false,"email":"patrick.brady@curesearch.org","label":false,"compId":1042601,"execId":2307740,"empId":2381765,"probability":0.0}
+{"jobLevel":3,"jobFunction":6,"empCount":28,"popularity":1798,"revenue":14.03,"fortuneListed":false,"email":"chris.dyrek@curesearch.org","label":false,"compId":1042601,"execId":2307743,"empId":2381767,"probability":0.0}
+{"jobLevel":3,"jobFunction":6,"empCount":28,"popularity":1798,"revenue":14.03,"fortuneListed":false,"email":"chris@curesearch.org","label":false,"compId":1042601,"execId":2307743,"empId":2381767,"probability":0.0}
+{"jobLevel":4,"jobFunction":4,"empCount":28,"popularity":1798,"revenue":14.03,"fortuneListed":false,"email":"mary.akers@curesearch.org","label":false,"compId":1042601,"execId":2307748,"empId":2381771,"probability":0.0}

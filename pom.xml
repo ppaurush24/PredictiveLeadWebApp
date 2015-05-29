@@ -68,6 +68,16 @@
 			<artifactId>hadoop-core</artifactId>
 			<version>0.20.2</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.hbase</groupId>
+			<artifactId>hbase-client</artifactId>
+			<version>0.98.4-hadoop2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hbase</groupId>
+			<artifactId>hbase-server</artifactId>
+			<version>0.98.0-hadoop2</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>DPWebApp</finalName>

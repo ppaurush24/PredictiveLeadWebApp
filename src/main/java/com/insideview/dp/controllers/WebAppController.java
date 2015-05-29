@@ -23,6 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.insideview.DataRecord;
+import com.insideview.DataRecordService;
+import com.insideview.LogisticRegression;
 
 @Controller
 public class WebAppController {
@@ -35,8 +38,7 @@ public class WebAppController {
 			@RequestParam MultipartFile file) {
 		Gson gson = new GsonBuilder().create();
 		LOG.info("inside controller method ");
-		return "Hello Dude";
-		/*if (file != null) {
+		if (file != null) {
 			try {
 				InputStream is = file.getInputStream();
 				BufferedReader reader = new BufferedReader(
@@ -47,10 +49,10 @@ public class WebAppController {
 					try {
 						DataRecord dto = gson.fromJson(line, DataRecord.class);
 						email = dto.getEmail();
-						DataRecordService service = new DataRecordService();
-						DataRecord result = service
+						System.out.println("Processed email: " +email);
+						DataRecord result = DataRecordService
 								.getDataRecordForEmail(email);
-						if (LogisticRegression.predict(result) >= 0.5) {
+						if (LogisticRegression.predict(result) == 1) {
 							result.setLabel(true);
 						} else
 							result.setLabel(false);
@@ -66,8 +68,8 @@ public class WebAppController {
 			} catch (Exception e) {
 				LOG.error("Exception: ", e);
 			}
-		}*/
-//		return null;
+		}
+		return null;
 	}
 
 	@RequestMapping(value = "/uploadTraining", method = RequestMethod.POST)
@@ -86,31 +88,28 @@ public class WebAppController {
 				conf.set("fs.default.name", "hdfs://172.24.2.77:9000");
 				Path path = new Path("/var/tmp/predictiveFeedback/record.txt");
 				FileSystem fs = FileSystem.get(conf);
-				BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
-						fs.create(path, true)));
-				while ((line = reader.readLine()) != null) {
-					if (!fs.exists(path)) {
+				
+				if (!fs.exists(path))
+				{
+					BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(
+							fs.create(path, true)));
+					while ((line = reader.readLine()) != null)
+					{
 						bw.write(line);
 						bw.newLine();
-					} else {
-						fs.append(path);
-					}
-
-					boolean flag = Boolean.getBoolean(fs.getConf().get(
-							"dfs.support.append"));
-					System.out.println("dfs.support.append is set to be "
-							+ flag);
-
-					if (flag) {
-						// FSDataOutputStream fsout = fs.append(new Path(uri));
-
-						// wrap the outputstream with a writer
-						// PrintWriter writer = new PrintWriter(fsout);
-						// writer.append(content);
-						// writer.close();
-
 					}
 					bw.close();
+				}
+				else
+				{
+					BufferedWriter bwa = new BufferedWriter(new OutputStreamWriter(
+							fs.append(path)));
+					while ((line = reader.readLine()) != null)
+					{
+						bwa.append(line);
+						bwa.newLine();
+					}
+					bwa.close();
 				}
 			} catch (IOException e) {
 				e.printStackTrace();
